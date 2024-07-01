@@ -10,8 +10,8 @@ env:
   AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
   AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
   AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-  RESOURCE_GROUP: ${{ github.base_ref }}
-  AKS_CLUSTER_NAME: ${{ github.base_ref }}
+  RESOURCE_GROUP: ${{ github.event.pull_request.base.ref }}
+  AKS_CLUSTER_NAME: ${{ github.event.pull_request.base.ref }}
   SSH_KEY: ${{ secrets.SSH_KEY }}
 
 jobs:
