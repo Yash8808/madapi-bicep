@@ -1,4 +1,4 @@
-name: Deploy AKS using Bicep
+name: Deploy AKS
 
 on:
   push:
@@ -14,7 +14,7 @@ env:
   SSH_KEY: ${{ secrets.SSH_KEY }}
 
 jobs:
-  deploy:
+  deploy-bicep:
     runs-on: ubuntu-latest
 
     steps:
