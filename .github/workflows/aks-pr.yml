@@ -1,0 +1,55 @@
+name: Plan AKS
+
+on:
+    pull_request:
+        types:
+          - opened
+          - synchronize
+
+env:
+  AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+  AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  RESOURCE_GROUP: ${{ github.event.pull_request.base.ref }}
+  AKS_CLUSTER_NAME: ${{ github.event.pull_request.base.ref }}
+  SSH_KEY: ${{ secrets.SSH_KEY }}
+
+jobs:
+  plan-bicep:
+    runs-on: ubuntu-latest
+    permissions:
+        id-token: write
+        contents: read
+        pull-requests: write
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Log in to Azure
+      uses: azure/login@v1
+      with:
+        creds: >
+          {
+            "clientId": "${{ secrets.AZURE_CLIENT_ID }}",
+            "clientSecret": "${{ secrets.AZURE_CLIENT_SECRET }}",
+            "tenantId": "${{ secrets.AZURE_TENANT_ID }}",
+            "subscriptionId": "1d2e52d9-93e9-4ee4-b2c6-badd357535e3"
+          }
+
+    - name: Set up Bicep
+      run: |
+        az bicep install
+        az bicep upgrade
+
+
+    - name: Bicep Plan
+      id: plan
+      run: |
+        az deployment group what-if --resource-group $RESOURCE_GROUP --template-file ./aks.bicep --parameters aksClusterName=$AKS_CLUSTER_NAME clientId=$AZURE_CLIENT_ID clientSecret=$AZURE_CLIENT_SECRET sshPublicKey="$SSH_KEY" --mode Complete > out.txt
+
+    - name: Post Plan
+      uses: peter-evans/create-or-update-comment@v4
+      with:
+        issue-number: ${{ github.event.pull_request.number }}
+        body-path: 'out.txt'
