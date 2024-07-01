@@ -40,4 +40,4 @@ jobs:
 
     - name: Deploy Bicep template
       run: |
-        az deployment group create --resource-group $RESOURCE_GROUP --template-file ./aks.bicep --parameters aksClusterName=$AKS_CLUSTER_NAME clientId=$AZURE_CLIENT_ID clientSecret=$AZURE_CLIENT_SECRET sshPublicKey=$SSH_KEY
+        az deployment group create --resource-group $RESOURCE_GROUP --template-file ./aks.bicep --parameters aksClusterName=$AKS_CLUSTER_NAME clientId=$AZURE_CLIENT_ID clientSecret=$AZURE_CLIENT_SECRET sshPublicKey="$SSH_KEY"
