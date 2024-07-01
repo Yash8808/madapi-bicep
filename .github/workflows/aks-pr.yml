@@ -44,15 +44,17 @@ jobs:
 
 
     - name: Bicep Plan
+      id: plan
       run: |
-        az deployment group what-if --resource-group $RESOURCE_GROUP --template-file ./aks.bicep --parameters aksClusterName=$AKS_CLUSTER_NAME clientId=$AZURE_CLIENT_ID clientSecret=$AZURE_CLIENT_SECRET sshPublicKey="$SSH_KEY" --mode Complete > bicep-plan.txt
+        az deployment group what-if --resource-group $RESOURCE_GROUP --template-file ./aks.bicep --parameters aksClusterName=$AKS_CLUSTER_NAME clientId=$AZURE_CLIENT_ID clientSecret=$AZURE_CLIENT_SECRET sshPublicKey="$SSH_KEY" --mode Complete
 
     - name: Post Plan
       uses: peter-evans/create-or-update-comment@v1
       with:
         issue-number: ${{ github.event.pull_request.number }}
         body: |
-          **Bicep Plan Output:**
+          **Terraform Plan**
           ```
-          $(cat bicep-plan.txt)
+          ${{ steps['plan'].outputs.stdout }}
+          ${{ steps['plan'].outputs.stderr }}
           ```
