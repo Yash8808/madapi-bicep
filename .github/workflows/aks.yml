@@ -10,7 +10,7 @@ env:
   AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
   AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
   RESOURCE_GROUP: ${{ github.head_ref || github.ref_name }} 
-  AKS_CLUSTER_NAME: biceppoc
+  AKS_CLUSTER_NAME: ${{ github.head_ref || github.ref_name }}
   SSH_KEY: ${{ secrets.SSH_KEY }}
 
 jobs:
@@ -40,4 +40,4 @@ jobs:
 
     - name: Deploy Bicep template
       run: |
-        az deployment group create --resource-group $RESOURCE_GROUP --template-file ./aks.bicep --parameters aksClusterName=$AKS_CLUSTER_NAME clientId=$AZURE_CLIENT_ID clientSecret=$AZURE_CLIENT_SECRET sshPublicKey="$SSH_KEY"
+        az deployment group create --resource-group $RESOURCE_GROUP --template-file ./aks.bicep --parameters aksClusterName=$AKS_CLUSTER_NAME clientId=$AZURE_CLIENT_ID clientSecret=$AZURE_CLIENT_SECRET sshPublicKey="$SSH_KEY" --mode Complete
