@@ -1,5 +1,5 @@
 name: Plan AKS
-#
+
 on:
     pull_request:
         types:
@@ -42,11 +42,22 @@ jobs:
         az bicep install
         az bicep upgrade
 
+    - name: Bicep lint test
+      run: |
+        echo "**Bicep lint test**" > test.txt
+        az bicep build --file ./aks.bicep >> test.txt
+
+    - name: Post lint test
+      uses: peter-evans/create-or-update-comment@v4
+      with:
+        issue-number: ${{ github.event.pull_request.number }}
+        body-path: 'test.txt'
 
     - name: Bicep Plan
       id: plan
       run: |
-        az deployment group what-if --resource-group $RESOURCE_GROUP --template-file ./aks.bicep --parameters aksClusterName=$AKS_CLUSTER_NAME clientId=$AZURE_CLIENT_ID clientSecret=$AZURE_CLIENT_SECRET sshPublicKey="$SSH_KEY" --mode Complete > out.txt
+        echo "**Bicep Plan**" > out.txt
+        az deployment group what-if --resource-group $RESOURCE_GROUP --template-file ./aks.bicep --parameters aksClusterName=$AKS_CLUSTER_NAME clientId=$AZURE_CLIENT_ID clientSecret=$AZURE_CLIENT_SECRET sshPublicKey="$SSH_KEY" --mode Complete >> out.txt
 
     - name: Post Plan
       uses: peter-evans/create-or-update-comment@v4

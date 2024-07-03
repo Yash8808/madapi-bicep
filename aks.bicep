@@ -22,6 +22,7 @@ param adminUsername string = 'azureuser'
 @description('Service principal client ID')
 param clientId string
 
+@secure()
 @description('Service principal client secret')
 param clientSecret string
 
