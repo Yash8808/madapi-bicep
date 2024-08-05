@@ -2,22 +2,22 @@
 param aksClusterName string
 
 @description('Location for the AKS cluster')
-param location string = resourceGroup().location
+param location string
 
 @description('Kubernetes version')
-param kubernetesVersion string = '1.28.9'
+param kubernetesVersion string
 
 @description('Name of the node pool')
-param nodePoolName string = 'default'
+param nodePoolName string
 
 @description('VM size for the nodes')
-param vmSize string = 'Standard_B2s'
+param vmSize string
 
 @description('Number of agent nodes')
-param agentCount int = 1
+param agentCount int
 
 @description('Admin username for the Linux nodes')
-param adminUsername string = 'azureuser'
+param adminUsername string
 
 @description('Service principal client ID')
 param clientId string
