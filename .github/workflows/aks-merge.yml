@@ -15,7 +15,9 @@ env:
 
 jobs:
   deploy-bicep:
-    runs-on: ubuntu-latest
+    #runs-on: ubuntu-latest
+    # Added self hosted agent
+    runs-on: self-hosted
 
     steps:
     - name: Checkout repository

@@ -16,7 +16,9 @@ env:
 
 jobs:
   plan-bicep:
-    runs-on: ubuntu-latest
+    #runs-on: ubuntu-latest
+    # Added elf hosted agent
+    runs-on: self-hosted
     permissions:
         id-token: write
         contents: read
