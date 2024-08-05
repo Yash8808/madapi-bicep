@@ -17,7 +17,7 @@ jobs:
   deploy-bicep:
     #runs-on: ubuntu-latest
     # Added self hosted agent
-    runs-on: self-hosted
+    runs-on: [self-hosted, GA-agent]
 
     steps:
     - name: Checkout repository
